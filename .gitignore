@@ -7,3 +7,10 @@ node_modules/
 /blob-report/
 /playwright/.cache/
 /playwright/.auth/
+
+# macOS
+.DS_Store
+*.pem
+
+# local env files
+.env*.local
