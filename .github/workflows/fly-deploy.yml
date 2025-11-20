@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - alternative
   pull_request:
     branches: [main]
     types: [opened, synchronize]
