@@ -33,7 +33,12 @@ jobs:
     needs: [deploy_pipeline]
     concurrency: deploy-group
     steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       - uses: anothrNick/github-tag-action@1.75.0
         if: ${{ github.event_name == 'push' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: patch
