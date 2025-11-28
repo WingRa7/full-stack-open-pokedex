@@ -41,25 +41,28 @@ jobs:
         if: ${{ failure() && steps.build.outcome == 'failure' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          args: '{{ EVENT_PAYLOAD.repository.full_name }} build failed'
+          args: 'Build failure - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
 
       - name: Discord Notify Deploy Failure
         if: ${{ failure() && steps.deploy.outcome == 'failure' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          args: '{{ EVENT_PAYLOAD.repository.full_name }} deployment failed'
+          args: 'Deployment failure - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
 
       - name: Discord Notify Deploy Success
         if: ${{ success() && steps.deploy.outcome == 'success' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          args: '{{ EVENT_PAYLOAD.repository.full_name }} deployment successful'
+          args: 'Deployment successful - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
 
   tag_release:
     name: Bump version and push tag
