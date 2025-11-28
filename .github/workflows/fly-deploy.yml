@@ -11,7 +11,7 @@ on:
     types: [opened, synchronize]
 
 env:
-  SKIP_DEPLOY: ${{ contains(join(github.event.commits.*.message, ''), "#skip") }}
+  SKIP_DEPLOY: ${{ contains(join(github.event.commits.*.message, ''), '#skip') }}
 
 jobs:
   deploy_pipeline:
