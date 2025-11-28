@@ -40,29 +40,53 @@ jobs:
       - name: Discord Notify Build Failure
         if: ${{ failure() && steps.build.outcome == 'failure' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
-        with:
-          args: 'Build failure - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
+          DISCORD_USERNAME: 'full-stack-open-pokedex'
+          DISCORD_AVATAR: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+          DISCORD_EMBEDS: >-
+            [{
+              "title": "Pokedex Build Failure",
+              "color": 16711680,
+              "description": "Build failed.",
+              "fields": [
+                { "name": "URL", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" },
+              ]
+            }]
 
       - name: Discord Notify Deploy Failure
         if: ${{ failure() && steps.deploy.outcome == 'failure' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
-        with:
-          args: 'Deployment failure - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
+          DISCORD_USERNAME: 'full-stack-open-pokedex'
+          DISCORD_AVATAR: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+          DISCORD_EMBEDS: >-
+            [{
+              "title": "Pokedex Deployment Failure",
+              "color": 16711680,
+              "description": "Deployment failed.",
+              "fields": [
+                { "name": "Commit", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" },
+              ]
+            }]
 
       - name: Discord Notify Deploy Success
         if: ${{ success() && steps.deploy.outcome == 'success' }}
         uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
-        with:
-          args: 'Deployment successful - {{ EVENT_PAYLOAD.head_commit.url }} by {{ EVENT_PAYLOAD.head_commit.author.name}} '
         env:
           DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-          DISCORD_USERNAME: '{{ EVENT_PAYLOAD.repository.name }}'
+          DISCORD_USERNAME: 'full-stack-open-pokedex'
+          DISCORD_AVATAR: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png'
+          DISCORD_EMBEDS: >-
+            [{
+              "title": "Pokedex Successfully Deployed",
+              "color": 6749952,
+              "description": "Successful new deployment.",
+              "fields": [
+                { "name": "Commit", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" }
+              ]
+            }]
 
   tag_release:
     name: Bump version and push tag
