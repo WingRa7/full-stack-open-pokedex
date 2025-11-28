@@ -84,7 +84,7 @@ jobs:
       - name: Push tag
         id: tag
         uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
-        if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == false }}
+        if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
