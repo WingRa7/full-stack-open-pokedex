@@ -39,36 +39,27 @@ jobs:
 
       - name: Discord Notify Build Failure
         if: ${{ failure() && steps.build.outcome == 'failure' }}
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Github Pokedex
-          text: Pokedex build failed
-          severity: error
-          color: '#ff0000'
-          title: Build failure
+          args: '{{ EVENT_PAYLOAD.repository.full_name }} build failed'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Discord Notify Deploy Failure
         if: ${{ failure() && steps.deploy.outcome == 'failure' }}
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Github Pokedex
-          text: Pokedex deployment failed
-          severity: error
-          color: '#ff0000'
-          title: Deployment failure
+          args: '{{ EVENT_PAYLOAD.repository.full_name }} deployment failed'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Discord Notify Deploy Success
         if: ${{ success() && steps.deploy.outcome == 'success' }}
-        uses: rjstone/discord-webhook-notify@v2.2.1
+        uses: Ilshidur/action-discord@d2594079a10f1d6739ee50a2471f0ca57418b554
         with:
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-          username: Github Pokedex
-          text: A new version of Pokedex deployed
-          severity: info
-          color: '#3BB143'
-          title: Successful deployment
+          args: '{{ EVENT_PAYLOAD.repository.full_name }} deployment successful'
+        env:
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
 
   tag_release:
     name: Bump version and push tag
