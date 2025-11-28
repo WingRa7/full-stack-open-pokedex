@@ -35,7 +35,7 @@ jobs:
         run: flyctl deploy --remote-only
         if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == 'false' }}
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          FLY_API_TOKEN: ${{ secrets.FLYY_API_TOKEN }}
 
       - name: Discord Notify Build Failure
         if: ${{ failure() && steps.build.outcome == 'failure' }}
@@ -50,7 +50,7 @@ jobs:
               "color": 16711680,
               "description": "Build failed.",
               "fields": [
-                { "name": "URL", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" },
+                { "name": "URL", "value": "${{ github.event.head_commit.url }}" }
               ]
             }]
 
@@ -67,7 +67,7 @@ jobs:
               "color": 16711680,
               "description": "Deployment failed.",
               "fields": [
-                { "name": "Commit", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" },
+                { "name": "Commit", "value": "${{ github.event.head_commit.url }}" }
               ]
             }]
 
@@ -84,7 +84,7 @@ jobs:
               "color": 6749952,
               "description": "Successful new deployment.",
               "fields": [
-                { "name": "Commit", "value": "{{ EVENT_PAYLOAD.head_commit.url }}" }
+                { "name": "Commit", "value": "${{ github.event.head_commit.url }}" }
               ]
             }]
 
