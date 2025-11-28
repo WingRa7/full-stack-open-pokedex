@@ -25,11 +25,50 @@ jobs:
           node-version: '20'
       - uses: superfly/flyctl-actions/setup-flyctl@master
       - run: npm install
-      - run: npm run build
-      - run: flyctl deploy --remote-only
+
+      - name: Build
+        id: build
+        run: npm run build
+      - name: Deploy
+        id: deploy
+        run: flyctl deploy --remote-only
         if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == false }}
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: Discord Notify Build Failure
+        if: ${{ failure() && steps.build.outcome == 'failure' }}
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Github Pokedex
+          text: Pokedex build failed
+          severity: error
+          color: '#ff0000'
+          title: Build failure
+
+      - name: Discord Notify Deploy Failure
+        if: ${{ failure() && steps.deploy.outcome == 'failure' }}
+        uses: rjstone/discord-webhook-notifyv2.2.1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Github Pokedex
+          text: Pokedex deployment failed
+          severity: error
+          color: '#ff0000'
+          title: Deployment failure
+
+      - name: Discord Notify Deploy Success
+        if: ${{ success() && steps.deploy.outcome == 'success' }}
+        uses: rjstone/discord-webhook-notify@v2.2.1
+        with:
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          username: Github Pokedex
+          text: A new version of Pokedex deployed
+          severity: info
+          color: '#3BB143'
+          title: Successful deployment
+
   tag_release:
     name: Bump version and push tag
     runs-on: ubuntu-latest
@@ -40,7 +79,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
+      - name: Push tag
+        id: tag
+        uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8
         if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == false }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
