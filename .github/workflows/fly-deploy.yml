@@ -41,7 +41,7 @@ jobs:
         with:
           node-version: '20'
       - uses: anothrNick/github-tag-action@1.75.0
-        if: ${{ github.event_name == 'push' }} && ${{ env.SKIP_DEPLOY == false }}
+        if: ${{ github.event_name == 'push' && env.SKIP_DEPLOY == false }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
