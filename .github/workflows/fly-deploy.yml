@@ -110,6 +110,7 @@ jobs:
   ping_fly:
     name: ping
     runs-on: ubuntu-latest
+    needs: [deploy_pipline]
     concurrency: deploy-group
     steps:
       - uses: actions/setup-node@v4
